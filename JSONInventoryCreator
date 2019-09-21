@@ -10,7 +10,38 @@ public class JSONReader {
 		System.out.printf("This is a service that creates a JSON database for a retail shopowner.%nThis database will store product name, product type, amount of product in stock, %nand the day of the week the product is typically delivered.");
 		System.out.println("How many products would you like to store in the database? (Enter an integer value)");
 		Scanner scan = new Scanner(System.in);
-		int numOfProducts = scan.nextInt();
+		boolean integerInput = false;
+		int numOfProducts=0;
+		while(integerInput==false) {
+			if(scan.hasNextInt()==true) {
+				numOfProducts = scan.nextInt();
+				integerInput=true;
+			}
+			else {
+				System.out.println("Error: Please enter an integer value.");
+			}
+		}
+		JSONArray productList=createArray(numOfProducts);
+		System.out.println("What would you like to name your JSON file?");
+		String fileName = scan.next();
+		 try (FileWriter file = new FileWriter(fileName+".json")) {//creates file
+	            file.write(productList.toString());//adds JSON Array to file
+	            file.flush();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		 System.out.println("You have successfully created your JSON database.");
+		 
+	}
+	/**
+	 * Creates JSON Array based on user-input information and the parameter of
+	 * number of products to be stored in the file.
+	 * @param numOfProducts
+	 * @return
+	 * @throws JSONException
+	 */
+	public static JSONArray createArray(int numOfProducts) throws JSONException{
+		Scanner scan = new Scanner(System.in);
 		JSONArray productList = new JSONArray();//array of JSONObjects that will be the products
 		for(int i=0; i<numOfProducts; i++) {
 			JSONObject product = new JSONObject();//product
@@ -31,18 +62,7 @@ public class JSONReader {
 			product.put(name, productInformation);//puts product information into product object
 			productList.put(product);//puts product object into product list array
 		}
-		System.out.println("What would you like to name your JSON file?");
-		String fileName = scan.next();
-		 try (FileWriter file = new FileWriter(fileName+".json")) {
-			 
-	            file.write(productList.toString());
-	            file.flush();
-	 
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-		 System.out.println("You have successfully created your JSON database.");
-		 
+		return productList;
 	}
 	
 }
