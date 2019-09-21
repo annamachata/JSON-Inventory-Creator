@@ -1,0 +1,49 @@
+import org.json.JSONArray;
+import org.json.JSONException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import org.json.JSONObject;
+
+public class JSONReader {
+	public static void main(String args[]) throws JSONException {
+		System.out.printf("This is a service that creates a JSON database for a retail shopowner.%nThis database will store product name, product type, amount of product in stock, %nand the day of the week the product is typically delivered.");
+		System.out.println("How many products would you like to store in the database? (Enter an integer value)");
+		Scanner scan = new Scanner(System.in);
+		int numOfProducts = scan.nextInt();
+		JSONArray productList = new JSONArray();//array of JSONObjects that will be the products
+		for(int i=0; i<numOfProducts; i++) {
+			JSONObject product = new JSONObject();//product
+			JSONObject productInformation = new JSONObject();//product information
+			int productNumber = i+1;
+			System.out.println("Enter the name of product "+productNumber);
+			String name = scan.next();
+			System.out.println("Enter the product type");
+			String type = scan.next();
+			System.out.println("Enter the number of products in stock (as an integer value)");
+			int stock = scan.nextInt();
+			System.out.println("Enter the day of the week in which restock of this product is usually delivered.");
+			String dayOfWeek = scan.next();
+			productInformation.put("Product Type", type);
+			productInformation.put("In Stock", stock);
+			productInformation.put("Product Name", name);
+			productInformation.put("Day of Week of Delivery", dayOfWeek);
+			product.put(name, productInformation);//puts product information into product object
+			productList.put(product);//puts product object into product list array
+		}
+		System.out.println("What would you like to name your JSON file?");
+		String fileName = scan.next();
+		 try (FileWriter file = new FileWriter(fileName+".json")) {
+			 
+	            file.write(productList.toString());
+	            file.flush();
+	 
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		 System.out.println("You have successfully created your JSON database.");
+		 
+	}
+	
+}
+	
